@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{366de7ac-d2ea-4c98-b755-2bbc7e2a11fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI\ImGui">
+      <UniqueIdentifier>{ef1bddad-35f7-4557-95e3-a758b0c32a02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{0d3edde7-4988-4878-8f1b-9b5f2cdfcf40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Features">
+      <UniqueIdentifier>{c7561229-b794-4d85-b53d-581530665a9c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\imgui.cpp">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\imgui_demo.cpp">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\imgui_draw.cpp">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\imgui_impl_dx9.cpp">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\imgui_impl_win32.cpp">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\imgui_tables.cpp">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ImGui\imgui_widgets.cpp">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Components.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Utils.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Featurers\Features.cpp">
+      <Filter>Source Files\Features</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="UI\UI.h">
+      <Filter>Source Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\imconfig.h">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\imgui.h">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\imgui_impl_dx9.h">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\imgui_impl_win32.h">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\imgui_internal.h">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\imstb_rectpack.h">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\imstb_textedit.h">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ImGui\imstb_truetype.h">
+      <Filter>Source Files\UI\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Utils.h">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Featurers\Features.h">
+      <Filter>Source Files\Features</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
