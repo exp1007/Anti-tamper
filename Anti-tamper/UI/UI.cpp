@@ -7,6 +7,8 @@
 #include <d3d9.h>
 #include <tchar.h>
 
+#include "../Config.h"
+
 // Data
 static LPDIRECT3D9              g_pD3D = nullptr;
 static LPDIRECT3DDEVICE9        g_pd3dDevice = nullptr;
@@ -54,7 +56,9 @@ int UI::Run()
     
     Style.WindowPadding = { 20,20 };
     Style.WindowPadding = { 20,20 };
+    Style.FramePadding = { 12,4 };
     Style.GrabMinSize = 5;
+    Style.SeparatorTextBorderSize = 1;
 
     Style.WindowShadowSize = 38;
     Style.WindowShadowOffsetAngle = 0;
@@ -66,7 +70,6 @@ int UI::Run()
     io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\arial.ttf", 15.0f);
 
     // Our state
-    bool show_demo_window = true;
     ImVec4 clear_color = ImVec4(0.f, 0.f, 0.f, 1.00f);
 
     // Main loop
@@ -113,10 +116,14 @@ int UI::Run()
         Globals::ClientSize.x = Globals::WindowInfo.rcClient.right - Globals::WindowInfo.rcClient.left;
         Globals::ClientSize.y = Globals::WindowInfo.rcClient.bottom - Globals::WindowInfo.rcClient.top;
 
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-
         UI::Components::MainWindow();
+
+        if (Config::Data.DebugWindow)
+            ImGui::ShowDemoWindow(&Config::Data.DebugWindow);
+
+        if (Config::Data.ConfigsWindow)
+            UI::Components::Configs();
+
 
         ImGui::EndFrame();
         g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);

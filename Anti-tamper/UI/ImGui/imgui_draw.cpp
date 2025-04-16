@@ -211,7 +211,7 @@ void ImGui::StyleColorsDark(ImGuiStyle* dst)
     colors[ImGuiCol_Header] = ImVec4(0.20f, 0.20f, 0.20f, 1.00f);
     colors[ImGuiCol_HeaderHovered] = ImVec4(0.24f, 0.24f, 0.24f, 1.00f);
     colors[ImGuiCol_HeaderActive] = ImVec4(0.24f, 0.24f, 0.24f, 1.00f);
-    colors[ImGuiCol_Separator] = ImVec4(0.40f, 0.61f, 1.00f, 1.00f);
+    colors[ImGuiCol_Separator] = ImVec4(0.652f, 0.774f, 1.000f, 0.588f);
     colors[ImGuiCol_SeparatorHovered] = ImVec4(0.18f, 0.18f, 0.18f, 1.00f);
     colors[ImGuiCol_SeparatorActive] = ImVec4(0.18f, 0.18f, 0.18f, 1.00f);
     colors[ImGuiCol_ResizeGrip] = ImVec4(0.17f, 0.17f, 0.17f, 1.00f);
@@ -241,8 +241,6 @@ void ImGui::StyleColorsDark(ImGuiStyle* dst)
     colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
     colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
     colors[ImGuiCol_WindowShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.37f);
-
-
 }
 
 void ImGui::StyleColorsClassic(ImGuiStyle* dst)

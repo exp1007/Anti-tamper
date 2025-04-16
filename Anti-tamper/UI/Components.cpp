@@ -1,15 +1,15 @@
 #include "UI.h"
 #include "Globals.h"
 #include "../Utils/Utils.h"
+#include "../Logs/Logs.h"
+#include "../Config.h"
+#include "../Alerts/Alerts.h"
 
 #include <string>
 #include <vector>
 #include <algorithm>
 
-bool ViewAlerts = false;
-bool ViewLogs = false;
-
-int UI::Components::MainWindow() {
+void UI::Components::MainWindow() {
 
 	ImGuiStyle& Style = ImGui::GetStyle();
 
@@ -19,18 +19,17 @@ int UI::Components::MainWindow() {
 
 	ImGui::Begin("Main window", nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoResize);
 
-	static bool tempBool = false;
-
 	if (ImGui::BeginMenuBar()) {
 		if (ImGui::BeginMenu("View")) {
-			ImGui::MenuItem("Alerts", NULL, &ViewAlerts);
-			ImGui::MenuItem("Logs", NULL, &ViewLogs);
+			ImGui::MenuItem("Alerts", NULL, &Config::Data.ViewAlerts);
+			ImGui::MenuItem("Logs", NULL, &Config::Data.ViewLogs);
 			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("UI Framework")) {
-			ImGui::MenuItem("Demo window", NULL, &tempBool);
-			ImGui::MenuItem("Styles window", NULL, &tempBool);
+			ImGui::MenuItem("Demo window", NULL, &Config::Data.DebugWindow);
+			ImGui::MenuItem("Styles window", NULL, &Config::Data.StylesWindow);
+			ImGui::MenuItem("Config window", NULL, &Config::Data.ConfigsWindow);
 			ImGui::EndMenu();
 		}
 	}
@@ -38,22 +37,19 @@ int UI::Components::MainWindow() {
 
 	// Childs
 	ImVec2 ChildSize = ImGui::GetWindowSize();
-	ChildSize.x = ChildSize.x / 2 - Style.WindowPadding.x - Style.ItemSpacing.x / 2;
+	ChildSize.x = ChildSize.x / 2 - Style.WindowPadding.x - Style.WindowPadding.x / 2;
 	ChildSize.y = ChildSize.y / 2 - Style.WindowPadding.y * 2;
 
 	if (ImGui::BeginChild("First child", { ChildSize.x,0 }, ImGuiChildFlags_Border)) {
-		static std::vector<Utils::ProcessEntity> ProcessList;
+		static std::vector<ProcEntity> ProcessList;
+		
 
-		ImGui::Checkbox("Enable protection", &tempBool);
+		ImGui::Checkbox("Enable protection", &Config::Data.IsProtected);
 
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { 14, 4 });
-
-		if (ImGui::Button("Select process")) {
-			ImGui::OpenPopup("Process list popup");
-			ProcessList = Utils::GetProcessList();
-		}
+		ImGui::SeparatorText("Setup");
 
 		ImGui::SetNextWindowSizeConstraints({ 0,0 }, { FLT_MAX,500 });
+
 		if (ImGui::BeginPopup("Process list popup")) {
 			static char SearchBuff[255] = "";
 			ImGui::InputText("##SearchProcess", SearchBuff, IM_ARRAYSIZE(SearchBuff));
@@ -68,56 +64,98 @@ int UI::Components::MainWindow() {
 					}
 
 					std::string FormatedProc;
-					FormatedProc += std::to_string(Proc.PID) + " | " + Proc.Name;
 					bool IsSelected = false;
-					ImGui::Selectable(FormatedProc.c_str(), IsSelected);
+					FormatedProc += std::to_string(Proc.PID) + " | " + Proc.Name;
+					if (ImGui::Selectable(FormatedProc.c_str(), IsSelected)) {
+						Config::Data.ProtectedProc = Proc;
+						Logs::Add("Selected protected process: " + Proc.Name + " (" + std::to_string(Proc.PID) + ")");
+					}
 
 				}
 
 				ImGui::EndListBox(); 
 			}
 
-			if(ImGui::Button("Refresh"))
+			if (ImGui::Button("Refresh"))
 				ProcessList = Utils::GetProcessList();
 
 			ImGui::EndPopup();
 		}
 
-		ImGui::PopStyleVar();
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { 14, 4 });
+		ImGui::BeginChild("Current process", { 0 ,100 }, ImGuiChildFlags_FrameStyle);
+		ImGui::Text("Process name: %s", Config::Data.ProtectedProc.Name.c_str());
+		ImGui::Text("PID: %d", Config::Data.ProtectedProc.PID);
 		ImGui::EndChild();
+		ImGui::PopStyleVar();
+
+		if (ImGui::Button("Select process")) {
+			ImGui::OpenPopup("Process list popup");
+			ProcessList = Utils::GetProcessList();
+		}
+
+		ImGui::SeparatorText("Protections");
+
+		ImGui::EndChild();
+
 	}
 
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { Style.WindowPadding.x, Style.ItemSpacing.y });
 	ImGui::SameLine();
 
 	if (ImGui::BeginChild("Second child", { ChildSize.x,0 }, ImGuiChildFlags_Border)) {
 
 		// Alerts terminal
-		if (ViewAlerts) {
+		if (Config::Data.ViewAlerts) {
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { 14, 4 });
 			ImGui::Text("Alerts");
 			ImGui::BeginChild("Alerts terminal", { 0,200 }, ImGuiChildFlags_FrameStyle);
-			ImGui::Text("Detected memory manipulation");
+
+			ImGuiListClipper clipper;
+			clipper.Begin(Globals::Alerts.size());
+			while (clipper.Step())
+				for (int line_no = clipper.DisplayStart; line_no < clipper.DisplayEnd; line_no++)
+					ImGui::Text(Globals::Alerts[line_no].Details.c_str());
+
 			ImGui::EndChild();
 			ImGui::PopStyleVar();
 		}
 
 		// Logs terminal
-		if (ViewLogs) {
+		if (Config::Data.ViewLogs) {
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { 14, 4 });
 			ImGui::Text("Logs terminal");
 			ImGui::BeginChild("Logs terminal", { 0,200 }, ImGuiChildFlags_FrameStyle);
-			ImGui::Text("--- Start of logs ---");
+
+			ImGuiListClipper clipper;
+			clipper.Begin(Globals::Logs.size());
+			while (clipper.Step())
+				for (int line_no = clipper.DisplayStart; line_no < clipper.DisplayEnd; line_no++)
+					ImGui::Text(Globals::Logs[line_no].c_str());
+			
 			ImGui::EndChild();
 			ImGui::PopStyleVar();
 		}
 
 		ImGui::EndChild();
 	}
+	ImGui::PopStyleVar();
 
 	ImGui::End();
 
 	// Cleaning pushes
 	ImGui::PopStyleVar();
+}
 
-	return 1;
+void UI::Components::Configs() {
+	ImGui::Begin("Configs", &Config::Data.ConfigsWindow);
+
+	static char ConfigName[255] = { };
+	ImGui::InputText("Config name", ConfigName, 255);
+	if (ImGui::Button("Save config"))
+		Config::SaveConfig(ConfigName);
+	if(ImGui::Button("Load config"))
+		Config::LoadConfig(ConfigName);
+
+	ImGui::End();
 }

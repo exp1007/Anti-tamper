@@ -114,11 +114,13 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -138,10 +140,14 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Featurers\Features.cpp" />
+    <ClCompile Include="Alerts\Alerts.cpp" />
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="Featurers\Protections.cpp" />
+    <ClCompile Include="Logs\Logs.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="UI\Components.cpp" />
     <ClCompile Include="UI\ImGui\imgui.cpp" />
@@ -155,7 +161,11 @@
     <ClCompile Include="Utils\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Featurers\Features.h" />
+    <ClInclude Include="Alerts\Alerts.h" />
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="Featurers\Protections.h" />
+    <ClInclude Include="json.hpp" />
+    <ClInclude Include="Logs\Logs.h" />
     <ClInclude Include="UI\Globals.h" />
     <ClInclude Include="UI\ImGui\imconfig.h" />
     <ClInclude Include="UI\ImGui\imgui.h" />

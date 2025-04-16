@@ -5,6 +5,7 @@ namespace UI {
 	int Run();
 
 	namespace Components {
-		int MainWindow();
+		void MainWindow();
+		void Configs();
 	}
 }

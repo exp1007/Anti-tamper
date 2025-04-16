@@ -1,4 +1,4 @@
-#include "Utils.h"
+#include "../Globals.h"
 
 #include <Windows.h>
 #include <stdio.h>
@@ -7,34 +7,33 @@
 #include <string>
 #include <vector>
 #include <unordered_set>
-
-std::string GetProcName(DWORD processID)
-{
-    CHAR szProcessName[MAX_PATH] = TEXT("<unknown>");
-    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION |
-        PROCESS_VM_READ,
-        FALSE, processID);
-
-    if (NULL != hProcess)
+namespace Utils {
+    std::string GetProcName(DWORD processID)
     {
-        HMODULE hMod;
-        DWORD cbNeeded;
+        CHAR szProcessName[MAX_PATH] = TEXT("<unknown>");
+        HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION |
+            PROCESS_VM_READ,
+            FALSE, processID);
 
-        if (EnumProcessModules(hProcess, &hMod, sizeof(hMod),
-            &cbNeeded))
+        if (NULL != hProcess)
         {
-            GetModuleBaseName(hProcess, hMod, szProcessName,
-                sizeof(szProcessName) / sizeof(TCHAR));
+            HMODULE hMod;
+            DWORD cbNeeded;
+
+            if (EnumProcessModules(hProcess, &hMod, sizeof(hMod),
+                &cbNeeded))
+            {
+                GetModuleBaseName(hProcess, hMod, szProcessName,
+                    sizeof(szProcessName) / sizeof(TCHAR));
+            }
         }
+
+        return std::string(szProcessName);
+
+        CloseHandle(hProcess);
     }
 
-    return std::string(szProcessName);
-
-    CloseHandle(hProcess);
-}
-
-namespace Utils {
-    std::vector<Utils::ProcessEntity> GetProcessList() {
+    std::vector<ProcEntity> GetProcessList() {
         DWORD aProcesses[1024], cbNeeded, cProcesses;
         unsigned int i;
         std::unordered_set<std::string> ProcWhiteList{
@@ -51,12 +50,12 @@ namespace Utils {
 
         cProcesses = cbNeeded / sizeof(DWORD);
 
-        std::vector<Utils::ProcessEntity> ProcessList;
+        std::vector<ProcEntity> ProcessList;
         for (i = 0; i < cProcesses; i++) {
             if (aProcesses[i] == 0)
                 continue;
 
-            Utils::ProcessEntity TempProc;
+            ProcEntity TempProc;
             TempProc.Name = GetProcName(aProcesses[i]);
             if (ProcWhiteList.find(TempProc.Name) != ProcWhiteList.end())
                 continue;
